@@ -32,6 +32,8 @@ function TicTacToe() {
   const winner = winInfo?.winner;
   const winningLine = winInfo?.line || [];
 
+  const isDraw = !winner && squares.every((square) => square !== null);
+
   const handleClick = (i: number) => {
     if (squares[i] || winner) {
       return;
@@ -43,8 +45,27 @@ function TicTacToe() {
     setXIsNext(!xIsNext);
   };
 
+  const handleRestart = () => {
+    setSquares(Array(9).fill(null));
+    setXIsNext(true);
+  };
+
+  const getStatus = () => {
+    if (winner) return `Winner: ${winner}`;
+    if (isDraw) return "Draw!";
+    return `Next turn: ${xIsNext ? "X" : "O"}`;
+  };
+
   return (
     <div className="container text-center mt-5">
+      <h1 className="mb-4">Tic Tac Toe</h1>
+
+      <div
+        className={`alert ${winner ? "alert-success" : "alert-primary"} d-inline-block px-5`}
+      >
+        <h3>{getStatus()}</h3>
+      </div>
+
       <div className="d-flex justify-content-center mt-3">
         <div style={{ maxWidth: "260px" }}>
           <div className="row g-0">
@@ -79,6 +100,10 @@ function TicTacToe() {
           </div>
         </div>
       </div>
+
+      <button className="btn btn-primary btn-lg mt-4" onClick={handleRestart}>
+        Restart Game
+      </button>
     </div>
   );
 }
